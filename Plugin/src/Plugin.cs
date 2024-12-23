@@ -4,21 +4,35 @@ using BepInEx;
 using LethalLib.Modules;
 using BepInEx.Logging;
 using System.IO;
-using ExampleEnemy.Configuration;
+using IPMaster.Configuration;
+using GraphicsAPI.CustomPostProcessing;
+using System;
+using IPMaster.Stalker;
+using System.Collections;
+using UnityEngine.Audio;
 
-namespace ExampleEnemy {
+namespace IPMaster
+{
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency(LethalLib.Plugin.ModGUID)] 
-    public class Plugin : BaseUnityPlugin {
+    [BepInDependency(LethalLib.Plugin.ModGUID)]
+#if DEBUG
+    [BepInDependency(TestingLib.Plugin.ModGUID, BepInDependency.DependencyFlags.SoftDependency)]
+#endif
+    public class Plugin : BaseUnityPlugin
+    {
         internal static new ManualLogSource Logger = null!;
         internal static PluginConfig BoundConfig { get; private set; } = null!;
         public static AssetBundle? ModAssets;
 
-        private void Awake() {
+        static EnemyType stalker = null!;
+        static AudioMixer audioMixer = null!;
+
+        private void Awake()
+        {
             Logger = base.Logger;
 
             // If you don't want your mod to use a configuration file, you can remove this line, Configuration.cs, and other references.
-            BoundConfig = new PluginConfig(base.Config);
+            BoundConfig = new PluginConfig(Config);
 
             // This should be ran before Network Prefabs are registered.
             InitializeNetworkBehaviours();
@@ -27,17 +41,18 @@ namespace ExampleEnemy {
             // You may want to rename your asset bundle from the AssetBundle Browser in order to avoid an issue with
             // asset bundle identifiers being the same between multiple bundles, allowing the loading of only one bundle from one mod.
             // In that case also remember to change the asset bundle copying code in the csproj.user file.
-            var bundleName = "modassets";
+            var bundleName = "elekrisk.ipmaster.modassets";
             ModAssets = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Info.Location), bundleName));
-            if (ModAssets == null) {
+            if (ModAssets == null)
+            {
                 Logger.LogError($"Failed to load custom assets.");
                 return;
             }
 
             // We load our assets from our asset bundle. Remember to rename them both here and in our Unity project.
-            var ExampleEnemy = ModAssets.LoadAsset<EnemyType>("ExampleEnemy");
-            var ExampleEnemyTN = ModAssets.LoadAsset<TerminalNode>("ExampleEnemyTN");
-            var ExampleEnemyTK = ModAssets.LoadAsset<TerminalKeyword>("ExampleEnemyTK");
+            // ExampleEnemy = ModAssets.LoadAsset<EnemyType>("ExampleEnemy");
+            // var ExampleEnemyTN = ModAssets.LoadAsset<TerminalNode>("ExampleEnemyTN");
+            // var ExampleEnemyTK = ModAssets.LoadAsset<TerminalKeyword>("ExampleEnemyTK");
 
             // Optionally, we can list which levels we want to add our enemy to, while also specifying the spawn weight for each.
             /*
@@ -62,17 +77,56 @@ namespace ExampleEnemy {
 
             // Network Prefabs need to be registered. See https://docs-multiplayer.unity3d.com/netcode/current/basics/object-spawning/
             // LethalLib registers prefabs on GameNetworkManager.Start.
-            NetworkPrefabs.RegisterNetworkPrefab(ExampleEnemy.enemyPrefab);
+            // NetworkPrefabs.RegisterNetworkPrefab(ExampleEnemy.enemyPrefab);
 
             // For different ways of registering your enemy, see https://github.com/EvaisaDev/LethalLib/blob/main/LethalLib/Modules/Enemies.cs
-            Enemies.RegisterEnemy(ExampleEnemy, BoundConfig.SpawnWeight.Value, Levels.LevelTypes.All, ExampleEnemyTN, ExampleEnemyTK);
+            // Enemies.RegisterEnemy(ExampleEnemy, BoundConfig.SpawnWeight.Value, Levels.LevelTypes.All, ExampleEnemyTN, ExampleEnemyTK);
             // For using our rarity tables, we can use the following:
-            // Enemies.RegisterEnemy(ExampleEnemy, ExampleEnemyLevelRarities, ExampleEnemyCustomLevelRarities, ExampleEnemyTN, ExampleEnemyTK);
-            
+            // Enemies.RegisterEnemy(IPMaster, ExampleEnemyLevelRarities, ExampleEnemyCustomLevelRarities, ExampleEnemyTN, ExampleEnemyTK);
+
+            stalker = ModAssets.LoadAsset<EnemyType>("Stalker");
+            NetworkPrefabs.RegisterNetworkPrefab(stalker.enemyPrefab);
+#pragma warning disable CS8604 // Possible null reference argument.
+            Enemies.RegisterEnemy(stalker, 25, Levels.LevelTypes.All, null as TerminalNode);
+#pragma warning restore CS8604 // Possible null reference argument.
+
+            audioMixer = ModAssets.LoadAsset<AudioMixer>("StalkerAudioMixer");
+            CustomPostProcessingManager.OnLoad += CustomPostProcessingManager_OnLoad;
+#if DEBUG
+            TestingLib.OnEvent.PlayerSpawn += OnPlayerSpawn;
+#endif
+
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
 
-        private static void InitializeNetworkBehaviours() {
+#if DEBUG
+        private void OnPlayerSpawn()
+        {
+            // TestingLib.Tools.GiveItemToSelf(TestingLib.Lookup.Item.Shovel);
+            // TestingLib.Tools.TeleportSelf(TestingLib.Tools.TeleportLocation.Inside);
+            // TestingLib.Tools.SpawnEnemyInFrontOfSelf(stalker.enemyName);
+        }
+#endif
+
+        private void CustomPostProcessingManager_OnLoad(object sender, EventArgs e)
+        {
+            // Load shader thingy
+            var stalkerMaterial = ModAssets!.LoadAsset<Material>("StalkerMaterial");
+
+            PostProcess postProcess = new("elekrisk.IPMaster.Stalker", stalkerMaterial)
+            {
+                InjectionType = InjectionType.BeforePostProcess
+            };
+
+            var customPass = CustomPostProcessingManager.Instance.AddPostProcess(postProcess);
+            GameObject handlerObj = new GameObject("PostProcessorHandler");
+            PostProcessorHandler handler = handlerObj.AddComponent<PostProcessorHandler>();
+            handler.Initialize(stalkerMaterial, customPass);
+            handler.AudioMixer = audioMixer;
+        }
+
+        private static void InitializeNetworkBehaviours()
+        {
             // See https://github.com/EvaisaDev/UnityNetcodePatcher?tab=readme-ov-file#preparing-mods-for-patching
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)
@@ -87,6 +141,6 @@ namespace ExampleEnemy {
                     }
                 }
             }
-        } 
+        }
     }
 }

@@ -1,3 +1,3 @@
-# Example Enemy
+# IPMaster
 
-This README file is for Thunderstore. Fill it out with information about your enemy!
+A mod made for my friends. Content hidden :P

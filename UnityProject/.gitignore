@@ -77,6 +77,8 @@ crashlytics-build.properties
 # Assemblies
 *.dll*
 
+# Crash blobs
+mono_crash.*.blob
+
 # We allow these dll files because we have the right to redistribute them
-!/[Aa]ssets/Plugins/Hamunii.ExampleEnemy.dll*
 !/[Aa]ssets/Plugins/LethalLib.dll*

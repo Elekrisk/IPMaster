@@ -84,8 +84,8 @@ TagManager:
   - PlacementBlocker
   - Railing
   - DecalStickableSurface
-  - 
-  - 
+  - Vehicle
+  - Stalker
   m_SortingLayers:
   - name: Default
     uniqueID: 0

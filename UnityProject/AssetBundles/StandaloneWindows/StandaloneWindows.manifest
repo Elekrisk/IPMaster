@@ -1,7 +1,7 @@
 ManifestFileVersion: 0
-CRC: 3937706982
+CRC: 1754529546
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: modassets
+      Name: elekrisk.ipmaster.modassets
       Dependencies: {}

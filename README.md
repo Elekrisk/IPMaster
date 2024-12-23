@@ -66,7 +66,7 @@ That should be all the required setup for this project, and now you can move to 
 
 ### Thunderstore Packages
 
-We have configured [ExampleEnemy.csproj](/Plugin/ExampleEnemy.csproj) to build a Thunderstore package to [/Plugin/Thunderstore/Packages/](/Plugin/Thunderstore/Packages/) using [tcli](https://github.com/thunderstore-io/thunderstore-cli/wiki) each time we make a release build of our mod. A release build can be done for example from the command-line like this: `dotnet build -c release`. This will use configuration options from [thunderstore.toml](/Plugin/Thunderstore/thunderstore.toml), so configure it for your own mod! Do note that we have not included a way to upload your mod to thunderstore via tcli in this project.
+We have configured [IPMaster.csproj](/Plugin/IPMaster.csproj) to build a Thunderstore package to [/Plugin/Thunderstore/Packages/](/Plugin/Thunderstore/Packages/) using [tcli](https://github.com/thunderstore-io/thunderstore-cli/wiki) each time we make a release build of our mod. A release build can be done for example from the command-line like this: `dotnet build -c release`. This will use configuration options from [thunderstore.toml](/Plugin/Thunderstore/thunderstore.toml), so configure it for your own mod! Do note that we have not included a way to upload your mod to thunderstore via tcli in this project.
 
 ### Renaming The Mod
 
@@ -78,7 +78,7 @@ Renaming a mod can easily break things if you don't update every instance of it.
 - If your IDE complains about invalid references, try restarting it. If this does not fix it, you probably have forgotten to rename something.
 
 > [!TIP]  
-> You can use `Ctrl` + `Shift`+ `F` to search every file in both Visual Studio and Visual Studio Code. This can for example help you find every instance of `ExampleEnemy` inside files in the whole project. Do note however that this does not apply to filenames.  
+> You can use `Ctrl` + `Shift`+ `F` to search every file in both Visual Studio and Visual Studio Code. This can for example help you find every instance of `IPMaster` inside files in the whole project. Do note however that this does not apply to filenames.  
 > In Visual Studio, you can use `Ctrl` + `,` to search files by name. In Visual Studio Code you can use `Ctrl` + `P` to do the same.
 
 ## Credits
@@ -86,7 +86,7 @@ Renaming a mod can easily break things if you don't update every instance of it.
 [EvaisaDev](https://github.com/EvaisaDev) - [LethalLib](https://github.com/EvaisaDev/LethalLib)  
 [Lordfirespeed](https://github.com/Lordfirespeed) - reference tcli usage in LethalLib  
 [Xilophor](https://github.com/Xilophor) - csproj files taken from Xilo's [mod templates](https://github.com/Xilophor/Lethal-Company-Mod-Templates)  
-[XuuXiao](https://github.com/XuuXiao/) - porting LC-ExampleEnemy for LC v50  
+[XuuXiao](https://github.com/XuuXiao/) - porting LC-IPMaster for LC v50  
 [nomnomab](https://github.com/nomnomab) - [Lethal Company Project Patcher](https://github.com/nomnomab/lc-project-patcher) - used for the Unity Project  
 [AlbinoGeek](https://github.com/AlbinoGeek) - issue template  
 Melavex - suggestions and feedback on this project  
