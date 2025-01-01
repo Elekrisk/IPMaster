@@ -135,7 +135,7 @@ namespace IPMaster.Stalker
                         StartSearch(transform.position);
                         TargetPlayer(null);
                         SwitchToBehaviourState((int)State.Searching);
-                    } else if (Vector3.Distance(targetPlayer.transform.position, transform.position) < 2f && timeSinceLastAttack >= 1.0f) {
+                    } else if (Vector3.Distance(targetPlayer.transform.position, transform.position) < 2f && timeSinceLastAttack >= 0.25f) {
                         timeSinceLastAttack = 0.0f;
                         DamagePlayerClientRpc(targetPlayer.playerClientId, 20);
                     }
