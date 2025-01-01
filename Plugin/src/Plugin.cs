@@ -102,8 +102,8 @@ namespace IPMaster
 #if DEBUG
         private void OnPlayerSpawn()
         {
-            // TestingLib.Tools.GiveItemToSelf(TestingLib.Lookup.Item.Shovel);
-            // TestingLib.Tools.TeleportSelf(TestingLib.Tools.TeleportLocation.Inside);
+            TestingLib.Tools.GiveItemToSelf(TestingLib.Lookup.Item.Shovel);
+            TestingLib.Tools.TeleportSelf(TestingLib.Tools.TeleportLocation.Inside);
             // TestingLib.Tools.SpawnEnemyInFrontOfSelf(stalker.enemyName);
         }
 #endif
