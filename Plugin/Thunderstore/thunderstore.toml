@@ -5,6 +5,8 @@ schemaVersion = "0.0.1"
 repository = "https://thunderstore.io"
 
 [package]
+namespace = "Elekrisk"
+name = "IPMaster"
 description = "Mod for IP."
 # websiteUrl = "https://github.com/Hamunii/LC-IPMaster"
 containsNsfwContent = false

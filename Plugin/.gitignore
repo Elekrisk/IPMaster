@@ -55,3 +55,4 @@ UpgradeLog.htm
 !/Thunderstore/Packages/*.txt
 
 /latest.log
+/.env
