@@ -700,6 +700,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 403010925
       objectReference: {fileID: 0}
+    - target: {fileID: 4253836024379458023, guid: d4575627afc0c2b22a3e8776c2b974bc,
+        type: 3}
+      propertyPath: subText
+      value: You should not be seeing this
+      objectReference: {fileID: 0}
     - target: {fileID: 4716253828453687262, guid: d4575627afc0c2b22a3e8776c2b974bc,
         type: 3}
       propertyPath: m_Name
@@ -754,6 +759,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761373940802399345, guid: d4575627afc0c2b22a3e8776c2b974bc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,3 +1,12 @@
+## 1.0.4
+
+- Balance changes
+  - Hoping they actually go through this time >:(
+
+## 1.0.3
+
+- I do not remember :P
+
 ## 1.0.2
 
 - New icon

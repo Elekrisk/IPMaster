@@ -8,7 +8,7 @@ release:
 	dotnet build -c Release
 
 publish: release
-	dotnet tcli publish --config-path Thunderstore/thunderstore.toml --file $$(find Thunderstore/Packages -type f -iname "*.zip" | sort -V | tail -n1)
+	dotnet tcli publish --config-path Thunderstore/thunderstore.toml --file $$(find Thunderstore/Packages -maxdepth 1 -type f -iname "*.zip" | sort -V | tail -n1)
 
 run: all
 	slc

@@ -13,6 +13,8 @@ namespace IPMaster.Stalker
         static int nextId = 0;
         int stalkerId = nextId++;
 
+        static float range = 10000.0f;
+
         bool registered = false;
 
         public int StalkerId { get { return stalkerId; } }
@@ -48,6 +50,9 @@ namespace IPMaster.Stalker
         public override void Update()
         {
             base.Update();
+
+            transform.Find("ScanNode")?.gameObject?.SetActive(false);
+
             AudioSource audioSource = transform.Find("NoiseSource").gameObject.GetComponent<AudioSource>();
 
             if (isEnemyDead)
@@ -97,7 +102,7 @@ namespace IPMaster.Stalker
                     bool found = TargetClosestPlayer(1.5f, true);
                     if (!found && TargetClosestPlayer(1.5f, false))
                     {
-                        if (Vector3.Distance(targetPlayer.transform.position, transform.position) > 10f)
+                        if (Vector3.Distance(targetPlayer.transform.position, transform.position) > range)
                         {
                             targetPlayer = null;
                         }
@@ -129,13 +134,15 @@ namespace IPMaster.Stalker
                     stareTimer += GetStareTimeIncreaseForDelta(AIIntervalTime);
                     break;
                 case (int)State.Following:
-                    if (targetPlayer == null || targetPlayer.isPlayerDead || (Vector3.Distance(transform.position, targetPlayer.transform.position) > 20 && !CheckLineOfSightForPosition(targetPlayer.transform.position)))
+                    if (targetPlayer == null || targetPlayer.isPlayerDead || (Vector3.Distance(transform.position, targetPlayer.transform.position) > range))
                     {
                         Plugin.Logger.LogInfo("Lost player");
                         StartSearch(transform.position);
                         TargetPlayer(null);
                         SwitchToBehaviourState((int)State.Searching);
-                    } else if (Vector3.Distance(targetPlayer.transform.position, transform.position) < 2f && timeSinceLastAttack >= 0.25f) {
+                    }
+                    else if (Vector3.Distance(targetPlayer.transform.position, transform.position) < 2f && timeSinceLastAttack >= 0.25f)
+                    {
                         timeSinceLastAttack = 0.0f;
                         DamagePlayerClientRpc(targetPlayer.playerClientId, 20);
                     }
@@ -251,8 +258,10 @@ namespace IPMaster.Stalker
         }
 
         [ClientRpc]
-        void DamagePlayerClientRpc(ulong playerClientId, int amount) {
-            if (GameNetworkManager.Instance.localPlayerController.playerClientId != playerClientId) {
+        void DamagePlayerClientRpc(ulong playerClientId, int amount)
+        {
+            if (GameNetworkManager.Instance.localPlayerController.playerClientId != playerClientId)
+            {
                 return;
             }
 
